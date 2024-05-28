@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <title>Плейлист</title>
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="img">
+                <div class="container__img" id="containerImg"></div>
+            </div>
+            
+            <div class="img-text" id="imgText">
+                <img src="image/Mask group.png" alt="">
+                <p>Поменять картинку</p>
+            </div>
+            <div class="name-radio">
+                <p id="radioName">NAME RADIO</p>
+            </div>
+            
+            <div class="progress__bar">
+                <div class="container__bar"></div>
+            </div>
+            <div class="nav__bar">
+                <img src="image/Polygon 1.png" alt="">
+                <img src="image/Polygon 3.png" alt="" id="groupImage">
+                <img src="image/Polygon 2.png" alt="">
+            </div>
+            
+            <audio id="audioPlayer" preload="none" volume="0.5" style="display: none;">
+                <source src="http://radio.flex.ru:8000/radionami" type="audio/mp3">
+            </audio>
+            
+                      
+            <div class="info-radio">
+                <p>FM 3/10 STATION</p>
+            </div>
+        </div>
+    </div>
+    <script>
+// Получаем ссылки на картинку "Group 1.png" и аудиоплеер
+const groupImage = document.getElementById('groupImage');
+const audioPlayer = document.getElementById('audioPlayer');
+
+// Определяем переменную для хранения текущего состояния картинки
+let isGroupImage = true;
+
+// Обработчик события клика по картинке "Group 1.png"
+groupImage.addEventListener('click', () => {
+    // Проверяем текущее состояние картинки и меняем на другую
+    if (isGroupImage) {
+        groupImage.src = 'image/Group 1.png';
+    } else {
+        groupImage.src = 'image/Polygon 3.png';
+    }
+
+    // Переключаем состояние картинки
+    isGroupImage = !isGroupImage;
+
+    // Проверяем, играет ли музыка в данный момент
+    if (audioPlayer.paused) {
+        // Если музыка не играет, запускаем воспроизведение
+        audioPlayer.play();
+    } else {
+        // Если музыка уже играет, ставим на паузу
+        audioPlayer.pause();
+    }
+});
+
+
+
+
+
+          document.getElementById('imgText').addEventListener('click', function() {
+            fetch('https://api.waifu.pics/sfw/waifu')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.url) {
+                        document.getElementById('containerImg').style.backgroundImage = `url(${data.url})`;
+                    } else {
+                        alert('Не удалось загрузить новое изображение.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке изображения:', error);
+                    alert('Произошла ошибка при попытке загрузить новое изображение.');
+                });
+        });
+    </script>
+</body>
+</html>
