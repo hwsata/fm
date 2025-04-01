@@ -3,98 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <head>
-  	<meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="logo.png">
- </head>
     <title>LOLI FM</title>
+    <style>
+        :root {
+            --neon-pink: #ff6b9d;
+            --neon-blue: #5d9cff;
+            --neon-purple: #b56bff;
+        }
+        
+        body {
+            font-family: 'Mulish', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .radio-container {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                        0 0 15px rgba(255, 107, 157, 0.2),
+                        0 0 30px rgba(93, 156, 255, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .radio-container:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+                        0 0 20px rgba(255, 107, 157, 0.3),
+                        0 0 40px rgba(93, 156, 255, 0.2);
+        }
+        
+        .cover-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4),
+                        0 0 10px rgba(255, 107, 157, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .cover-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5),
+                        0 0 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.3s ease;
+        }
+        
+        .change-image {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+        
+        .cover-container:hover .change-image {
+            opacity: 1;
+        }
+        
+        .radio-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #e2e2ff;
+            text-shadow: 0 0 10px var(--neon-pink);
+            position: relative;
+        }
+        
+        .radio-name::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+        
+        .radio-genre {
+            font-size: 14px;
+            color: #a1a1c2;
+            margin-bottom: 25px;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+        
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            height: 5px;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px var(--neon-pink);
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); opacity: 0.3; }
+            20% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .control-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #e2e2ff;
+            font-size: 22px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-btn:hover {
+            color: var(--neon-pink);
+            transform: scale(1.1);
+            text-shadow: 0 0 10px var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+        
+        .play-btn {
+            background: linear-gradient(135deg, var(--neon-pink) 0%, var(--neon-purple) 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.5),
+                        0 0 15px rgba(255, 107, 157, 0.7);
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-pink) 100%);
+            box-shadow: 0 6px 30px rgba(255, 107, 157, 0.7),
+                        0 0 20px rgba(255, 107, 157, 0.9);
+        }
+        
+        .volume-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .volume-slider {
+            width: 120px;
+            -webkit-appearance: none;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .volume-slider:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--neon-pink);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--neon-pink), 
+                        0 0 10px var(--neon-pink);
+        }
+        
+        .home-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e2e2ff;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .home-btn:hover {
+            color: var(--neon-pink);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+        }
+        
+        /* Анимации */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Медиа запросы для адаптивности */
+        @media (max-width: 480px) {
+            .radio-container {
+                padding: 20px;
+            }
+            
+            .cover-container {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .radio-name {
+                font-size: 20px;
+            }
+            
+            .play-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+            
+            .control-btn {
+                font-size: 18px;
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="main">
-        <div class="container">
-            <div class="img">
-                <div class="container__img" id="containerImg"></div>
-            </div>
-            
-            <div class="img-text" id="imgText">
-                <img src="image/Mask group.png" alt="">
-                <p>Поменять картинку</p>
-            </div>
-            <div class="name-radio">
-                <p id="radioName">𖤐ﮩﮩ٨ـﮩﮩωιηѕєηт ƒм ﮩﮩـ٨ﮩـ٨ﮩ</p>
-            </div>
+    <div class="radio-container">
+        <a href="https://hwsata.github.io/mew/" class="home-btn" title="На главную">
+            <i class="fas fa-home"></i>
+        </a>
         
-            <div class="progress__bar">
-                <div class="container__bar"></div>
-            </div>
-            <div class="nav__bar">
-                <img src="image/Polygon 1.png" alt="">
-                <img src="image/Polygon 3.png" alt="" id="groupImage">
-                <img src="image/Polygon 2.png" alt="">
-            </div>
-            
-            <audio id="audioPlayer" preload="none" volume="0.5" style="display: none;">
-                <source src="https://kibo.fm/live?stream=efb7fb82-7f94-4a2d-a08a-966bf38245bc" type="audio/mp3">
-            </audio>
-            
-                      
-            <div class="info-radio">
-                <p>𝖉𝖊𝖒𝖔𝖓</p>
+        <div class="cover-container">
+            <div class="cover-image" id="coverImage" style="background-image: url('https://i.imgur.com/JnQJxZP.jpg')"></div>
+            <div class="change-image" id="changeImage">
+                <i class="fas fa-sync-alt"></i> Сменить обложку
             </div>
         </div>
+        
+        <div class="radio-name pulse" id="radioName">𖤐ﮩﮩ٨ـﮩﮩωιηѕєηт ƒм ﮩﮩـ٨ﮩـ٨ﮩ</div>
+        <div class="radio-genre">𝖉𝖊𝖒𝖔𝖓</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" id="prevBtn">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="control-btn play-btn" id="playBtn">
+                <i class="fas fa-play" id="playIcon"></i>
+            </button>
+            <button class="control-btn" id="nextBtn">
+                <i class="fas fa-step-forward"></i>
+            </button>
+        </div>
+        
+        <div class="volume-container">
+            <i class="fas fa-volume-up" style="color: #a1a1c2;"></i>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+        
+        <audio id="audioPlayer" preload="none" style="display: none;">
+            <source src="https://kibo.fm/live?stream=efb7fb82-7f94-4a2d-a08a-966bf38245bc" type="audio/mp3">
+        </audio>
     </div>
+
     <script>
-// Получаем ссылки на картинку "Group 1.png" и аудиоплеер
-const groupImage = document.getElementById('groupImage');
-const audioPlayer = document.getElementById('audioPlayer');
-
-// Определяем переменную для хранения текущего состояния картинки
-let isGroupImage = true;
-
-// Обработчик события клика по картинке "Group 1.png"
-groupImage.addEventListener('click', () => {
-    // Проверяем текущее состояние картинки и меняем на другую
-    if (isGroupImage) {
-        groupImage.src = 'image/Group 1.png';
-    } else {
-        groupImage.src = 'image/Polygon 3.png';
-    }
-
-    // Переключаем состояние картинки
-    isGroupImage = !isGroupImage;
-
-    // Проверяем, играет ли музыка в данный момент
-    if (audioPlayer.paused) {
-        // Если музыка не играет, запускаем воспроизведение
-        audioPlayer.play();
-    } else {
-        // Если музыка уже играет, ставим на паузу
-        audioPlayer.pause();
-    }
-});
-
-
-
-
-
-          document.getElementById('imgText').addEventListener('click', function() {
+        // Элементы DOM
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const progressBar = document.getElementById('progressBar');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const coverImage = document.getElementById('coverImage');
+        const changeImage = document.getElementById('changeImage');
+        const radioName = document.getElementById('radioName');
+        
+        // Состояние плеера
+        let isPlaying = false;
+        
+        // Обработчики событий
+        playBtn.addEventListener('click', togglePlay);
+        volumeSlider.addEventListener('input', setVolume);
+        changeImage.addEventListener('click', changeCoverImage);
+        
+        // Добавляем эффект неона при наведении на название
+        radioName.addEventListener('mouseenter', () => {
+            radioName.style.textShadow = '0 0 15px var(--neon-pink)';
+        });
+        
+        radioName.addEventListener('mouseleave', () => {
+            radioName.style.textShadow = '0 0 10px var(--neon-pink)';
+        });
+        
+        // Функция переключения воспроизведения
+        function togglePlay() {
+            if (isPlaying) {
+                audioPlayer.pause();
+                playIcon.classList.replace('fa-pause', 'fa-play');
+                playBtn.classList.remove('pulse');
+            } else {
+                audioPlayer.play();
+                playIcon.classList.replace('fa-play', 'fa-pause');
+                playBtn.classList.add('pulse');
+            }
+            isPlaying = !isPlaying;
+        }
+        
+        // Функция установки громкости
+        function setVolume() {
+            audioPlayer.volume = volumeSlider.value;
+        }
+        
+        // Функция смены обложки
+        function changeCoverImage() {
+            // Добавляем анимацию нажатия
+            coverImage.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                coverImage.style.transform = 'scale(1)';
+            }, 150);
+            
             fetch('https://api.waifu.pics/sfw/waifu')
                 .then(response => response.json())
                 .then(data => {
                     if (data.url) {
-                        document.getElementById('containerImg').style.backgroundImage = `url(${data.url})`;
-                    } else {
-                        alert('Не удалось загрузить новое изображение.');
+                        // Анимация смены обложки
+                        coverImage.style.opacity = '0';
+                        setTimeout(() => {
+                            coverImage.style.backgroundImage = `url(${data.url})`;
+                            coverImage.style.opacity = '1';
+                        }, 300);
                     }
                 })
                 .catch(error => {
                     console.error('Ошибка при загрузке изображения:', error);
-                    alert('Произошла ошибка при попытке загрузить новое изображение.');
+                    coverImage.style.transform = 'scale(1)';
+                    alert('Не удалось загрузить новую обложку. Попробуйте ещё раз.');
                 });
+        }
+        
+        // Обновление прогресс-бара
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
+        
+        // Клик по прогресс-бару для перемотки
+        document.querySelector('.progress-container').addEventListener('click', (e) => {
+            const progressContainer = e.currentTarget;
+            const clickPosition = e.clientX - progressContainer.getBoundingClientRect().left;
+            const progressContainerWidth = progressContainer.clientWidth;
+            const seekTime = (clickPosition / progressContainerWidth) * audioPlayer.duration;
+            audioPlayer.currentTime = seekTime;
+        });
+        
+        // Установка начальной громкости
+        audioPlayer.volume = 0.5;
+        
+        // Обработка смены размера окна
+        window.addEventListener('resize', () => {
+            // Можно добавить дополнительные адаптивные изменения при необходимости
+            console.log('Размер экрана изменён');
         });
     </script>
 </body>
